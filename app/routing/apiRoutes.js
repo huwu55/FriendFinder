@@ -14,7 +14,10 @@ function findFriend(user){
             minDiff = tempDiff;
             friendIndex = i;
         }
+        tempDiff = 0;
     }
+
+    console.log(minDiff);
 
     return friends[friendIndex];
 }
