@@ -5,11 +5,10 @@
   <meta charset="UTF-8">
   <title>Survey</title>
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <script src="https://code.jquery.com/jquery.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  
 </head>
 <body>
 
@@ -163,6 +162,26 @@
         Submit</button>
       </div>
 
+      <div class="modal" tabindex="-1" role="dialog" id="findFriend" aria-labelledby="friendFinderLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title">We find you a friend!</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Name: <span id="friendName"></span> <br>
+              <img id="friendPhoto" width="200px" height="200px">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <footer class="footer">
       <div class="container">
         <p><a href="/api/friends">API Friends Link</a></p>
@@ -176,6 +195,11 @@
 <script type='text/javascript'>
 
     $("#submit").on("click", function(){
+        if($("#name").val().trim() === "" || $("#photo").val().trim() === ""){
+            alert("Please enter all required fields.");
+            return;
+        }
+        
         var data = {
             name: $("#name").val().trim(),
             photoLink: $("#photo").val().trim(),
@@ -183,9 +207,11 @@
         };
 
         for(var i=0; i < 10; i++){
-          // console.log($("#q"+ (i+1)).val());
-          // console.log(typeof parseInt($("#q"+ (i+1)).val()));
-          // console.log("-------");
+          if ($("#q"+ (i+1)).val() === ""){
+              alert("Please enter all required fields.");
+              return;
+          }
+
           data.answers.push($("#q"+ (i+1)).val());
         }
 
@@ -195,7 +221,13 @@
             data: data
         }).then(function(result){
             console.log(result);
-            alert("processed");
+            //alert("processed");
+            $("#friendName").text(result.name);
+
+            $("#friendPhoto").attr("src", result.photoLink)
+                .attr("alt", result.name + "'s photo");
+
+            $('#findFriend').modal('show');
 
             $('.friend').val("");
         });

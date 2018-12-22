@@ -1,2 +1,0 @@
-USE friends_db;
-
