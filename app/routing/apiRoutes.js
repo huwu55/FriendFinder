@@ -32,9 +32,7 @@ function findFriend(user, friends){
     for (var i = 0; i < friends.length; i++){
         //console.log(friends[i].name);
         for(var j = 1; j < 11; j++){
-            //tempDiff += Math.abs(user.answers[j] - friends[i].answers[j]);
             tempDiff += Math.abs(user.answers[j-1] - friends[i]["answer_" + j]);
-            //console.log(typeof friends[i]["answer_" + j]);
         }
 
         if (tempDiff < minDiff){
@@ -84,12 +82,17 @@ module.exports = function(app){
             if (error) return console.log(error);
 
             //res.json(results);
-            for (var i = 0; i < 10; i++)
+            var sqlValues = [userInfo.name, userInfo.photoLink];
+            for (var i = 0; i < 10; i++){
                 userInfo.answers[i] = parseInt(userInfo.answers[i]);
+                sqlValues.push(userInfo.answers[i]);
+            }
+                
             var friend = findFriend(userInfo, results);
 
             res.send(friend);
-            connection.query("INSERT INTO friends (name, photo_link, answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8, answer_9, answer_10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [userInfo.name, userInfo.photoLink, userInfo.answers[0], userInfo.answers[1], userInfo.answers[2], userInfo.answers[3], userInfo.answers[4], userInfo.answers[5], userInfo.answers[6], userInfo.answers[7], userInfo.answers[8], userInfo.answers[9]], function(error, results, fields){
+
+            connection.query("INSERT INTO friends (name, photo_link, answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8, answer_9, answer_10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", sqlValues, function(error, results, fields){
                 if (error) return console.log(error);
             });
         });
