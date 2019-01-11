@@ -6,4 +6,4 @@ This full-stack site takes in results from users' surveys, then compare their an
 
 ## Deployed on Heroku
 
-Click to the page [Friend Finder](https://young-refuge-49039.herokuapp.com/).
+Click to the page [Friend Finder](https://friend-finder-huiling.herokuapp.com/).
